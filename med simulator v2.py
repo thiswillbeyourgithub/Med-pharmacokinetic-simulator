@@ -14,7 +14,7 @@ def pharmacokinetic_simulator(
         bioavailability=0.4,
         abs_half_life=2.5,
         elim_half_life=0.4,
-        plot_hour_bounds=[7, 24],
+        plot_hour_bounds=[7, 26],
         show_plot=True,
         ):
     """
@@ -25,11 +25,11 @@ def pharmacokinetic_simulator(
 
     Parameters
     ==========
-    mg_per_pill: int, default 10
-        amount of mg inside a pill
     hour_taken: list of numbers
         the hour when you took the pill. For examen [8.25, 14.5] if you
         took them at 8:15am and 2:30pm
+    mg_per_pill: int, default 10
+        amount of mg inside a pill
     bioavailability: float, default 0.4
         expected bioavailability. Literature indicates 0.4 to be a plausible
         guess. Increase if you tend take the methylphenidate during the meal,
@@ -42,7 +42,7 @@ def pharmacokinetic_simulator(
         I think it is a coincidence that 1/2.5 = 0.4.
         Initially computed to comeup within 1h13 (about the average between
         1h (during meal) and 1h30 (on empty stomach)).
-    plot_hour_bounds: list of numers, default [7, 24]
+    plot_hour_bounds: list of numers, default [7, 26]
         a list with the first and last hour of the plot to display
     show_plot: bool or str, default True
         if True do plot and show it
@@ -58,6 +58,8 @@ def pharmacokinetic_simulator(
                         "You have to put numbers inside hour_taken!")
     assert isinstance(mg_per_pill, (int, float)), "mg_per_pill is not a number"
     assert isinstance(bioavailability, (int, float)), "bioabailability is not a number"
+    assert isinstance(abs_half_life, float), "wrong type for elim_half_life"
+    assert isinstance(elim_half_life, float), "wrong type for elim_half_life"
     assert isinstance(plot_hour_bounds, list), "plot_hour_bounds is not a list"
     assert len(plot_hour_bounds) == 2, "invalid length of plot_hour_bounds"
     assert len([x
@@ -110,6 +112,10 @@ def pharmacokinetic_simulator(
     ax.plot(x, y, color='lightblue', linewidth=3)
     ax.set(xlim=[plot_hour_bounds[0], plot_hour_bounds[1]],
            ylim=[0, y_max])
+    plotTitle = (f"Pharmacokinetic Simulator \n({total_amount}mg "
+                 f"in {len(hour_taken)} pills - elapsed: {int(elapsed)}%)")
+    plotTitle = str(''.join(plotTitle))
+    fig.suptitle(plotTitle)
 
     # axis
     ax.set(xlabel='Time',
@@ -118,17 +124,12 @@ def pharmacokinetic_simulator(
     for i in range(0, 10):
         xticks.append(i)
     xticks.append(max(y))
-    xticks.append(y[-1])
+    #xticks.append(y[-1])  # add latest value
+    xticks.append(y[int(24 * 1 / time_step)])  # add value at midnight
 
     for i in range(0, len(xticks)):
         xticks[i] = round(xticks[i], 3)
     ax.yaxis.set(ticks=xticks)
-
-    # title
-    plotTitle = (f"Pharmacokinetic Simulator \n({total_amount}mg "
-                 f"in {len(hour_taken)} pills)\nElapsed: {elapsed}%")
-    plotTitle = str(''.join(plotTitle))
-    fig.suptitle(plotTitle)
 
     # vertical lines:
     # at midnight:
