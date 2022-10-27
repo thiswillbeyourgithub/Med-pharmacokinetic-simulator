@@ -108,12 +108,9 @@ def pharmacokinetic_simulator(
         print("Not creating plot, finished.")
 
     # create plot
-    y_max = max(1.1 * max(y), 5)
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(t, y, color='lightblue', linewidth=3)
-    ax.set(xlim=[plot_hour_bounds[0], plot_hour_bounds[1]],
-           ylim=[0, y_max])
     plotTitle = (f"Pharmacokinetic Simulator \n({total_amount}mg "
                  f"in {len(hour_taken)} pills - elapsed: {int(elapsed)}%)")
     plotTitle = str(''.join(plotTitle))
@@ -132,6 +129,10 @@ def pharmacokinetic_simulator(
     for i in range(0, len(xticks)):
         xticks[i] = round(xticks[i], 3)
     ax.yaxis.set(ticks=xticks)
+
+    y_max = max(int(max(y) + 1), 5)
+    ax.set(xlim=[plot_hour_bounds[0], plot_hour_bounds[1]],
+           ylim=[-0.3, y_max])
 
     # vertical lines:
     # at midnight:
