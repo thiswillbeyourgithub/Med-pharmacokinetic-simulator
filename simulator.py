@@ -133,8 +133,7 @@ def pharmacokinetic_simulator(
     ax.set(xlabel='Time',
            ylabel='Amount of medication in the blood (mg)')
     xticks = []
-    for i in range(0, 10):
-        xticks.append(i)
+    xticks.extend([0, 5, 10])
     xticks.append(max(y))
     #xticks.append(y[-1])  # add latest value
     xticks.append(y[int(24 / time_step)])  # add value at midnight
@@ -149,11 +148,11 @@ def pharmacokinetic_simulator(
 
     # extra lines:
     # at midnight:
-    plt.axhline(y=y[int(24 / time_step)], color="red", linestyle='--', linewidth=1)
+    plt.axvline(x=t[int(24 / time_step)], color="red", linestyle='--', linewidth=1)
     # at effective threshold
     plt.axhline(y=effective_threshold, color="black", linestyle='--', linewidth=3)
     # at maximum:
-    plt.axhline(y=max(y), color="red", linestyle='--', linewidth=1)
+    # plt.axhline(y=max(y), color="red", linestyle='--', linewidth=1)
     # when taken:
     for i in range(0, len(hour_taken)):
         plt.axvline(x=hour_taken[i], linestyle=':', linewidth=1)
