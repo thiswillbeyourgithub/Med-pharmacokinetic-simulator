@@ -6,7 +6,8 @@ It can readily be adapted to any immediate release drug if you have the right ph
 
 2 versions exist:
 * A first one in R using the package `Shiny` to create interactive plots. To see examples of it running, please look at the gifs below.
-* A second and much improved version using python and not interactive.
+* A second and much improved version using python and not interactive but with more accurate parameters and cleaner code.
+
 
 *keywords : ADHD, ADD, attention deficit, hyperactivity*
 
