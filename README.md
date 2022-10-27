@@ -5,9 +5,8 @@ This simple simple coding project was designed to quickly create pharmacokinetic
 It can readily be adapted to any immediate release drug if you have the right pharmacokinetic parameters.
 
 2 versions exist:
-* A first one in R using the package `Shiny` to create interactive plots. To see examples of it running, please look at the gifs below.
-* A second and much improved version using python and not interactive but with more accurate parameters and cleaner code.
-
+* An obsolete first one in R using the package `Shiny` to create interactive plots. Example gifs at the end of the page.
+* A second and much improved version using python and not (yet) interactive but with more accurate parameters and cleaner code.
 
 *keywords : ADHD, ADD, attention deficit, hyperactivity*
 
@@ -22,19 +21,19 @@ It can readily be adapted to any immediate release drug if you have the right ph
 * This repository is licensed
 
 ## Usage
-### In R
+### In python 
+* `python ./script.py --hour_taken "[8.15, 12, 14]" --show_plot True`
+### In R (obsolete)
 * download the latest .R file from this page.
 * open it with RStudio (development environment for R language programming, obviously free)
 * make sure Shiny is installed : type `install.packages("shiny")` inside the R console, this will install Shiny, a package allowing nice app like display with dynamic updating.
 * run the code and adjust the value appearing on screen.
-### In python 
-* `python ./script.py --hour_taken "[8.15, 12, 14]" --show_plot True`
 
 
 ## In action:
 ### Python
 ![ ](screenshots/screenshot_python.png)
-### R
+### R (obsolete)
 #### gif
 ![demo](screenshots/demo.gif)
 #### Picture
