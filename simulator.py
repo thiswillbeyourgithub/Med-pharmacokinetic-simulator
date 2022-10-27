@@ -11,6 +11,7 @@ simple pharmacokinetic simulator.
 def pharmacokinetic_simulator(
         mg_per_pill=10,
         hour_taken=[9, 11, 12, 14],
+        effective_threshold=1,
         bioavailability=0.4,
         abs_half_life=0.5,
         elim_half_life=2.5,
@@ -25,11 +26,14 @@ def pharmacokinetic_simulator(
 
     Parameters
     ==========
+    mg_per_pill: int, default 10
+        amount of mg inside a pill
     hour_taken: list of numbers
         the hour when you took the pill. For examen [8.25, 14.5] if you
         took them at 8:15am and 2:30pm
-    mg_per_pill: int, default 10
-        amount of mg inside a pill
+    effective_threshold: float, default 1
+        threshold mg in your blood desired. This is taken into account
+        when computing the amount of medication elapsed today.
     bioavailability: float, default 0.4
         expected bioavailability. Literature indicates 0.4 to be a plausible
         guess. Increase if you tend take the methylphenidate during the meal,
@@ -97,7 +101,12 @@ def pharmacokinetic_simulator(
     hour = int(now.hour)
     minute = int(now.minute)
     time = hour+minute/60
-    elapsed = round(sum(y[:int(time * 1 / time_step)]) / sum(y) * 100, 2)
+    y_not_effective = np.where(y < effective_threshold)[0]
+    y_copy = y.copy()
+    y_copy[y_not_effective] = 0
+    elapsed = sum(y_copy[:int(time * 1 / time_step)]) / sum(y_copy) * 100
+    elapsed = round(elapsed, 2)
+    del y_copy
     print(f"Elapsed portion: {elapsed}%")
 
     # midnight value
