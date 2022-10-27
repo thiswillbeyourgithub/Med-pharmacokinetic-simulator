@@ -59,6 +59,7 @@ def pharmacokinetic_simulator(
                 ]) == 0, (
                         "You have to put numbers inside hour_taken!")
     assert isinstance(mg_per_pill, (int, float)), "mg_per_pill is not a number"
+    assert isinstance(effective_threshold, (int, float)), "effective_threshold is not a number"
     assert isinstance(bioavailability, (int, float)), "bioabailability is not a number"
     assert isinstance(abs_half_life, (int, float)), "wrong type for elim_half_life"
     assert isinstance(elim_half_life, (int, float)), "wrong type for elim_half_life"
@@ -143,9 +144,11 @@ def pharmacokinetic_simulator(
     ax.set(xlim=[plot_hour_bounds[0], plot_hour_bounds[1]],
            ylim=[-0.3, y_max])
 
-    # vertical lines:
+    # extra lines:
     # at midnight:
     plt.axhline(y=y[int(24 / time_step)], color="red", linestyle='--', linewidth=1)
+    # at effective threshold
+    plt.axhline(y=effective_threshold, color="black", linestyle='--', linewidth=3)
     # at maximum:
     plt.axhline(y=max(y), color="red", linestyle='--', linewidth=1)
     # when taken:
