@@ -14,7 +14,7 @@ def pharmacokinetic_simulator(
         effective_threshold=1,
         bioavailability=0.4,
         abs_half_life=0.5,
-        elim_half_life=2.5,
+        elim_half_life=3,
         plot_hour_bounds=[7, 26],
         show_plot=True,
         ):
@@ -42,6 +42,8 @@ def pharmacokinetic_simulator(
     abs_half_life: float, default 0.5
         absorption half life in hours, empirically determined. It means that
         in "value * 60" minutes you have 50% of the drug in your blood.
+        An offset of 15 minutes is taken into account to let the drug
+        get into the digestive system.
     elim_half_life: float, default 3
         elimination half life in hour, 2 to 3 according to the literature.
     plot_hour_bounds: list of numers, default [7, 26]
@@ -94,8 +96,9 @@ def pharmacokinetic_simulator(
     # values
     y = np.fromiter((0 for i in t), dtype=float)
     for i, h in enumerate(hour_taken):
-        limit = len(y) - int(h * 1 / time_step)
-        y[int(h * 1/time_step):] += curve_template[:limit]
+        h += 0.25  # 15 minutes for the drug to start being digested.
+        limit = len(y) - int(h / time_step)
+        y[int(h / time_step):] += curve_template[:limit]
 
     # compute AUC elapsed
     now = datetime.datetime.now()
@@ -105,13 +108,13 @@ def pharmacokinetic_simulator(
     y_not_effective = np.where(y < effective_threshold)[0]
     y_copy = y.copy()
     y_copy[y_not_effective] = 0
-    elapsed = sum(y_copy[:int(time * 1 / time_step)]) / sum(y_copy) * 100
+    elapsed = sum(y_copy[:int(time / time_step)]) / sum(y_copy) * 100
     elapsed = round(elapsed, 2)
     del y_copy
     print(f"Elapsed portion: {elapsed}%")
 
     # midnight value
-    midnight_value = y[int(24 * 1 / time_step)]
+    midnight_value = y[int(24 / time_step)]
     print(f"Value at midnight: {round(midnight_value, 2)}")
 
     if show_plot is False:
@@ -134,7 +137,7 @@ def pharmacokinetic_simulator(
         xticks.append(i)
     xticks.append(max(y))
     #xticks.append(y[-1])  # add latest value
-    xticks.append(y[int(24 * 1 / time_step)])  # add value at midnight
+    xticks.append(y[int(24 / time_step)])  # add value at midnight
 
     for i in range(0, len(xticks)):
         xticks[i] = round(xticks[i], 3)
