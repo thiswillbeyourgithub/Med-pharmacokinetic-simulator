@@ -90,7 +90,7 @@ def pharmacokinetic_simulator(
     absorption_exp = dose_per_pill * np.exp(-alpha * t)
     beta = np.log(2) / elim_half_life
     elimination_exp = dose_per_pill * np.exp(-beta * t)
-    curve_template = -absorption_exp + elimination_exp
+    curve_template = elimination_exp - absorption_exp
 
     # make a long string of zero that will be summed with the offset curve
     # values
