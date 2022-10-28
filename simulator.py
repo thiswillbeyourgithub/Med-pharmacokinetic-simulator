@@ -13,7 +13,7 @@ def pharmacokinetic_simulator(
         hour_taken=[9, 11, 12, 14],
         effective_threshold=1,
         bioavailability=0.4,
-        abs_half_life=0.5,
+        abs_half_life=1,
         elim_half_life=3,
         plot_hour_bounds=[7, 26],
         show_plot=True,
@@ -39,7 +39,7 @@ def pharmacokinetic_simulator(
         guess. Increase if you tend take the methylphenidate during the meal,
         especially if rich in fat. The literature indicates 0.1 to 0.5 with
         a mean at 0.3.
-    abs_half_life: float, default 0.5
+    abs_half_life: float, default 1
         absorption half life in hours, empirically determined. It means that
         in "value * 60" minutes you have 50% of the drug in your blood.
         An offset of 15 minutes is taken into account to let the drug
